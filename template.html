@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Touhou Calendar</title>
+    <style type="text/css">
+    * {
+      font-family: sans-serif;
+      box-sizing: border-box;
+    }
+    .month > h2 {
+      background:#eee;
+    }
+    .touhouday {
+      margin-bottom: 1em;
+    }
+    .touhouday:last-child {
+      margin-bottom: 0px;
+    }
+    .touhouday > h4 {
+      margin: 0px;
+    }
+    .touhouday > p {
+      margin: 0px;
+    }
+    .tag {
+      margin-right: 0.5em;
+      font-size: 85%;
+    }
+    .char {
+      display: inline-block;
+      padding: 5px;
+      margin-right: 0.5em;
+      background: #ddd;
+      border-radius: 5px;
+      font-size: 85%;
+    }
+    .citations {
+      font-size:80%;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>Touhou Calendar</h1>
+    <p>
+      In the Touhou Project fandom, there are several days celevrated by fans, usually by posting fanart.
+      This page forms a (hopefully) comprehensive list of days in use, presented in English for the Touhou Project's sizable western audience.
+    </p>
+    <p>
+      The majority of the days are <a href="https://en.wikipedia.org/wiki/Japanese_wordplay#Goroawase"><em>goroawase</em>, i.e. numeric puns in Japanese.</a>
+      The majority of the day definitions are derived from entries on the <a href="https://dic.pixiv.net/a/%E6%9D%B1%E6%96%B9%E3%82%AD%E3%83%A3%E3%83%A9%E3%81%AE%E6%97%A5">Pixiv Encyclopedia page for Touhou Character Days</a>.
+    </p>
+    <p>
+      Any missing days, corrections, or additional notes can be suggested via DM to <a href="https://twitter.com/TouhouCalendar">@TouhouCalendar on Twitter.</a> 
+      This dataset will be published to Github (or similar) soon.
+    </p>
+    {%- for month in months %}
+    <div class="month">
+      <h2>{{ month.name }}</h2>
+      {%- for day in month.days -%}
+      <div class="day">
+        <h3>{{ month.name }} {{ day.day }}</h3>
+        <ul>
+          {%- for td in day.touhoudays %}
+          <li class="touhouday">
+            <h4>{{ td.name }}</h4>
+            <div class="tags">
+              {%- for tag in td.tags %}
+                <span class="tag">#{{tag.name}} (
+                  {%- if tag.is_pixiv() -%}
+                    <a href="{{ tag.pixiv_link() }}">Pixiv</a>
+                  {%- endif -%}
+                  {%- if tag.is_pixiv() and tag.is_twitter() -%}
+                    &nbsp;|&nbsp;{# lol this sucks but it's sufficient until we add another link type #}
+                  {%- endif -%}
+                  {%- if tag.is_twitter() -%}
+                    <a href="{{ tag.twitter_link() }}">Twitter</a>
+                  {%- endif -%}
+                )</span>
+              {%- endfor %}
+            </div>
+            <div class="characters">
+              {%- for character in td.characters %}
+                <span class="char char-{{ character }}">{{ character }}</span>
+              {%- endfor %}
+            </div>
+            <p>{{ td.explanation }}</p>
+            {%- if td.citations|length %}
+            <div class="citations">
+              {%- for c in td.citations %}
+                <a href="{{ c.url }}">{{ c.name }}</a>
+              {%- endfor %}
+            </div>
+            {%- endif -%}
+          </li>
+          {%- endfor %}
+        </ul>
+      </div>
+      {%- endfor %}
+    </div>
+    {%- endfor %}
+  </body>
+</html>

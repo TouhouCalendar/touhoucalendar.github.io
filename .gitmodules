@@ -1,0 +1,3 @@
+[submodule "touhoucalendar"]
+	path = touhoucalendar
+	url = https://github.com/TouhouCalendar/TouhouCalendarBot
